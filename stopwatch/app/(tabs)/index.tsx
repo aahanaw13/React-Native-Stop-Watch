@@ -42,7 +42,7 @@ const Stopwatch=()=>{
     setIsRunning(false);
     clearInterval(intervalRef.current);
     setTime(0);
-    setLapse([]);
+    setLaps([]);
   }
   //record a lap
   const handleLap=()=>{
@@ -52,4 +52,87 @@ const Stopwatch=()=>{
       setLaps([{lapTime, totalTime:time,id:Date.now()},...laps])
     }
   };
-}
+  const formattedTime=formatTime(time);
+  //get min and max lap times for highlighting 
+  const getLapstyle= (lapTime)=>{
+    if(laps.length<2) return{};
+    const lapTime= laps.map((I)=>I.lapTime);
+    const minLap=Math.min(...lapTimes);
+    const maxLap=Math.max(...lapTimes);
+    if (lapTime===minLap) return styles.fastestLap;
+    if (lapTime===maxLap) return styles.slowestLap;
+    return {};
+  }
+  const renderLapItem = ({ item, index }) => {
+    const lapFormatted = formatTime(item.lapTime);
+    return (
+      <View style={[styles.lapItem, getLapStyle(item.lapTime)]}>
+        <Text style={styles.lapText}>Lap {laps.length - index}</Text>
+        <Text style={styles.lapTime}>
+          {lapFormatted.minutes}:{lapFormatted.seconds}.{lapFormatted.milliseconds}
+        </Text>
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar barStyle="light-content" />
+      
+      {/* Time Display */}
+      <View style={styles.timeContainer}>
+        <Text style={styles.timeText}>
+          {formattedTime.hours}:{formattedTime.minutes}:{formattedTime.seconds}
+          <Text style={styles.milliseconds}>.{formattedTime.milliseconds}</Text>
+        </Text>
+      </View>
+
+      {/* Control Buttons */}
+      <View style={styles.buttonContainer}>
+        {/* Left Button: Reset or Lap */}
+        <TouchableOpacity
+          style={[styles.button, styles.secondaryButton]}
+          onPress={isRunning ? handleLap : handleReset}
+          disabled={!isRunning && time === 0}
+        >
+          <Text style={[
+            styles.buttonText,
+            !isRunning && time === 0 && styles.disabledText
+          ]}>
+            {isRunning ? 'Lap' : 'Reset'}
+          </Text>
+        </TouchableOpacity>
+
+        {/* Right Button: Start or Pause */}
+        <TouchableOpacity
+          style={[
+            styles.button,
+            isRunning ? styles.pauseButton : styles.startButton,
+          ]}
+          onPress={isRunning ? handlePause : handleStart}
+        >
+          <Text style={[
+            styles.buttonText,
+            isRunning ? styles.pauseText : styles.startText
+          ]}>
+            {isRunning ? 'Pause' : 'Start'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Lap List */}
+      <View style={styles.lapsContainer}>
+        <FlatList
+          data={laps}
+          renderItem={renderLapItem}
+          keyExtractor={(item) => item.id.toString()}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={
+            <Text style={styles.emptyText}>No laps recorded</Text>
+          }
+        />
+      </View>
+    </SafeAreaView>
+  );
+};
+
