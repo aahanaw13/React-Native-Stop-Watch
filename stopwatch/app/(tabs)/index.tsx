@@ -54,9 +54,9 @@ const Stopwatch=()=>{
   };
   const formattedTime=formatTime(time);
   //get min and max lap times for highlighting 
-  const getLapstyle= (lapTime)=>{
+  const getLapStyle= (lapTime)=>{
     if(laps.length<2) return{};
-    const lapTime= laps.map((I)=>I.lapTime);
+    const lapTimes= laps.map((I)=>I.lapTime);
     const minLap=Math.min(...lapTimes);
     const maxLap=Math.max(...lapTimes);
     if (lapTime===minLap) return styles.fastestLap;
@@ -136,3 +136,102 @@ const Stopwatch=()=>{
   );
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1a1a2e',
+    paddingHorizontal: 20,
+  },
+  timeContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  timeText: {
+    fontSize: 64,
+    fontWeight: '200',
+    color: '#ffffff',
+    fontVariant: ['tabular-nums'],
+  },
+  milliseconds: {
+    fontSize: 40,
+    color: '#888',
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    paddingVertical: 20,
+  },
+  button: {
+    width: 90,
+    height: 90,
+    borderRadius: 45,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 3,
+  },
+  secondaryButton: {
+    backgroundColor: '#2d2d44',
+    borderColor: '#404060',
+  },
+  startButton: {
+    backgroundColor: '#0a3d2a',
+    borderColor: '#0f5132',
+  },
+  pauseButton: {
+    backgroundColor: '#5c1a1a',
+    borderColor: '#842029',
+  },
+  buttonText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#ffffff',
+  },
+  startText: {
+    color: '#4ade80',
+  },
+  pauseText: {
+    color: '#f87171',
+  },
+  disabledText: {
+    color: '#666',
+  },
+  lapsContainer: {
+    flex: 3,
+    borderTopWidth: 1,
+    borderTopColor: '#333',
+    paddingTop: 10,
+  },
+  lapItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#2a2a3e',
+  },
+  lapText: {
+    color: '#ffffff',
+    fontSize: 16,
+  },
+  lapTime: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontVariant: ['tabular-nums'],
+  },
+  fastestLap: {
+    backgroundColor: 'rgba(74, 222, 128, 0.15)',
+  },
+  slowestLap: {
+    backgroundColor: 'rgba(248, 113, 113, 0.15)',
+  },
+  emptyText: {
+    color: '#666',
+    textAlign: 'center',
+    marginTop: 30,
+    fontSize: 16,
+  },
+});
+
+export default Stopwatch;
